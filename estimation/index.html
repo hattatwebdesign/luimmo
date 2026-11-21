@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1 · Estimation propriétaire — Démo Hatnova</title>
+<meta name="description" content="Démo interactive : estimation en ligne pour propriétaires, avec contact transmis instantanément à l'agence.">
+<link rel="stylesheet" href="../assets/hatnova.css">
+<style>
+  .result{margin-top:16px;border:1px solid var(--gold);background:#fbf3e3;border-radius:12px;padding:14px 16px}
+  .result .range{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--ink);margin:2px 0}
+  .bar{position:relative;height:8px;border-radius:99px;background:linear-gradient(90deg,#e9dcc0,var(--gold),#e9dcc0);margin:10px 0 4px}
+  .bar i{position:absolute;top:-4px;width:3px;height:16px;background:var(--navy);border-radius:2px;left:50%}
+  .terr.hidden{display:none}
+  .lead-new{background:#fff8e8}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../index.html"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22.5" fill="none" stroke="#c9a35a" stroke-width="1.5"/><text x="21.5" y="32.5" text-anchor="middle" font-family="Lora,Georgia,serif" font-size="23" font-weight="600" fill="#f4efe6">H</text><path transform="translate(33.5 15) scale(.42)" fill="#c9a35a" d="M0,-10 L2.47,-3.4 L9.51,-3.09 L3.99,1.3 L5.88,8.09 L0,4.2 L-5.88,8.09 L-3.99,1.3 L-9.51,-3.09 L-2.47,-3.4Z"/></svg><span><b>Hatnova</b><small>WEB &amp; CONSULTING</small></span></a><div class="crumb">Démo · <b>Module 1 · Estimation propriétaire</b></div><div class="sp"></div><div class="seg" role="group" aria-label="Vue"><button type="button" data-set-view="client" class="on" aria-pressed="true">Vue client</button><button type="button" data-set-view="agence" aria-pressed="false">Vue agence</button></div><a class="toplink" href="../index.html">← Tous les modules</a></div></header>
+<main class="wrap">
+ <div class="mod">
+  <section class="intro">
+    <div class="eyebrow">Module 1 · Nouveaux mandats de vente</div>
+    <h1>Estimation propriétaire</h1>
+    <p class="lead">Les propriétaires de biens d’exception s’informent d’abord en ligne sur la valeur de leur bien, souvent bien avant d’appeler une agence.</p>
+    <ol class="steps">
+      <li><span>1</span><div>Le propriétaire saisit les caractéristiques de son bien sur <b>votre</b> site.</div></li>
+      <li><span>2</span><div>Il reçoit une fourchette indicative calculée avec <b>vos</b> prix au m², ou uniquement une demande de rappel.</div></li>
+      <li><span>3</span><div>Vous recevez le contact immédiatement, avec son souhait de rendez-vous pour l’estimation sur place.</div></li>
+    </ol>
+    <div class="chips"><span class="chip navy">Défi 1 · Course aux mandats</span><span class="chip navy">Défi 2 · Prix irréalistes</span></div>
+    <div class="pricebox"><div><small>Mise en place</small><b>1 690 €</b></div><div><small>Mensuel</small><b>249 €</b></div><div class="free"><small>Mois d’essai</small><b>0 €</b></div></div>
+    <p class="note"><b>À essayer :</b> remplissez le formulaire, demandez un rendez-vous, puis passez en <b>Vue agence</b> en haut à droite.</p>
+  </section>
+
+  <section>
+   <!-- ================= VUE CLIENT ================= -->
+   <div class="stage" data-view="client">
+    <div class="stage-head"><span class="eyebrow">Vue propriétaire</span><span class="sp"></span><span class="sample">Données d’exemple</span></div>
+    <div class="split">
+     <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i><div class="url">votre-agence.lu/estimation</div></div>
+      <div class="browser-body">
+        <h2 style="font-size:26px">Que vaut votre bien&nbsp;?</h2>
+        <p class="muted small" style="margin:4px 0 16px">Première estimation discrète · gratuite · 2 minutes</p>
+        <form id="estForm" autocomplete="off">
+          <div class="field"><label>Type de bien</label>
+            <div class="opts" id="typeOpts">
+              <button type="button" class="opt" data-v="appartement">Appartement</button>
+              <button type="button" class="opt" data-v="penthouse">Penthouse</button>
+              <button type="button" class="opt" data-v="maison">Maison</button>
+              <button type="button" class="opt on" data-v="villa">Villa</button>
+            </div></div>
+          <div class="row2">
+            <div class="field"><label for="commune">Commune / quartier</label><select id="commune" class="input"></select></div>
+            <div class="field"><label for="surf">Surface habitable (m²)</label><input id="surf" class="input" type="number" min="30" max="2000" value="420"></div>
+          </div>
+          <div class="row2">
+            <div class="field terr" id="terrField"><label for="ares">Terrain (ares)</label><input id="ares" class="input" type="number" min="0" max="200" value="12"></div>
+            <div class="field"><label>État</label>
+              <select id="etat" class="input"><option value="0.85">À rénover</option><option value="1">Bon état</option><option value="1.07" selected>Rénové récemment</option><option value="1.12">Neuf / comme neuf</option></select></div>
+          </div>
+          <div class="field"><label>Atouts</label>
+            <div class="opts" id="extraOpts">
+              <button type="button" class="opt" data-v="jardin">Jardin / terrasse</button>
+              <button type="button" class="opt on" data-v="garage">Garage</button>
+              <button type="button" class="opt" data-v="vue">Vue dégagée</button>
+              <button type="button" class="opt" data-v="piscine">Piscine</button>
+            </div></div>
+          <button class="btn btn-navy btn-block" type="submit" style="margin-top:6px">Obtenir ma première estimation</button>
+        </form>
+
+        <div id="resultBox" class="hidden fade-in">
+          <div class="result" id="resultRange">
+            <div class="eyebrow">Votre fourchette indicative</div>
+            <div class="range" id="rangeTxt">–</div>
+            <div class="bar"><i></i></div>
+            <p class="xs muted" id="rangeSub">Basée sur les prix de l’agence pour ce quartier. Une estimation sur place reste indispensable.</p>
+          </div>
+          <div class="result hidden" id="resultCall">
+            <div class="eyebrow">Merci</div>
+            <p style="margin-top:4px">Votre agent vous rappelle sous 24&nbsp;h pour une estimation personnelle et confidentielle.</p>
+          </div>
+          <form id="leadForm" class="card" style="margin-top:14px" autocomplete="off">
+            <h3 style="font-size:18px;margin-bottom:10px">Estimation personnelle sur place</h3>
+            <div class="row2">
+              <div class="field"><label for="nom">Nom</label><input id="nom" class="input" value="Famille Weber"></div>
+              <div class="field"><label for="tel">Téléphone</label><input id="tel" class="input" value="+352 XXX XXX XXX"></div>
+            </div>
+            <div class="field"><label>Quand vous convient-il&nbsp;?</label>
+              <div class="opts" id="slotOpts">
+                <button type="button" class="opt on" data-v="Cette semaine">Cette semaine</button>
+                <button type="button" class="opt" data-v="Semaine prochaine">Semaine prochaine</button>
+                <button type="button" class="opt" data-v="Dans un mois">Dans un mois</button>
+              </div></div>
+            <label class="check" style="margin:6px 0 12px"><input type="checkbox" checked> J’accepte d’être contacté au sujet de mon bien (RGPD).</label>
+            <button class="btn btn-gold btn-block" type="submit">Demander un rendez-vous</button>
+          </form>
+          <div id="leadDone" class="hidden card fade-in" style="margin-top:14px;border-color:var(--green)">
+            <b style="color:var(--green)">✓ Demande envoyée.</b> <span class="small">Votre agent confirme le rendez-vous par téléphone.</span>
+          </div>
+        </div>
+      </div>
+     </div>
+     <div class="phone" aria-label="Téléphone de l’agent">
+      <div class="phone-screen">
+        <div class="clock" id="clk">21:47</div>
+        <div class="date">Téléphone de l’agent</div>
+        <div id="notifs"></div>
+        <p class="xs" id="phoneHint" style="color:#8f9ab5;text-align:center;margin-top:30px">Le contact arrive ici dès que le propriétaire demande un rendez-vous.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+
+   <!-- ================= VUE AGENCE ================= -->
+   <div class="stage hidden" data-view="agence">
+    <div class="stage-head"><span class="eyebrow">Vue agence · Tableau de bord</span><span class="sp"></span><span class="sample">Données d’exemple</span></div>
+    <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i><div class="url">espace.votre-agence.lu/estimations</div></div>
+      <div class="browser-body">
+        <div class="kpis" style="margin-bottom:16px">
+          <div class="kpi"><b id="kLeads">6</b><small>Demandes ce mois</small></div>
+          <div class="kpi"><b id="kRdv">4</b><small>Rendez-vous d’estimation</small></div>
+          <div class="kpi"><b>2</b><small>Mandats signés</small></div>
+        </div>
+        <h3 style="font-size:18px;margin-bottom:8px">Nouvelles demandes de propriétaires</h3>
+        <div class="list" id="leadList"></div>
+
+        <div class="divider"></div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+          <h3 style="font-size:18px">Ce que voit le propriétaire</h3><span class="sp" style="flex:1"></span>
+          <div class="seg light" id="modeSeg"><button class="on" data-m="range">Fourchette indicative</button><button data-m="call">Rappel uniquement</button></div>
+        </div>
+        <p class="small muted" style="margin-bottom:12px">Vous décidez : afficher une fourchette (plus de demandes) ou seulement proposer un rappel (plus de contrôle sur le prix annoncé).</p>
+        <h3 style="font-size:18px;margin:6px 0 8px">Votre grille de prix (€/m²)</h3>
+        <table class="table" id="priceTable"><thead><tr><th>Quartier</th><th class="num">Appartement</th><th class="num">Maison / villa</th></tr></thead><tbody></tbody></table>
+        <p class="xs muted" style="margin-top:8px">Modifiez une valeur, puis refaites une estimation en Vue client : le calcul utilise immédiatement votre grille.</p>
+      </div>
+    </div>
+   </div>
+  </section>
+ </div>
+<footer class="foot"><span>Démo interactive · données d’exemple, rien n’est enregistré ni envoyé.</span><span>Hatnova Web &amp; Consulting · <a href="https://hattat-web.de/" rel="noopener noreferrer">hattat-web.de</a> · <a href="https://hattat-web.de/impressum.html" rel="noopener noreferrer">Mentions légales / Impressum</a> · <a href="https://hattat-web.de/datenschutz.html" rel="noopener noreferrer">Confidentialité / Datenschutz</a></span></footer>
+</main>
+<script src="../assets/hatnova.js" defer></script>
+<script src="../assets/js/estimation.js" defer></script>
+</body>
+</html>

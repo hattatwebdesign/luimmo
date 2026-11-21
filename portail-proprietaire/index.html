@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3 · Portail propriétaire — Démo Hatnova</title>
+<meta name="description" content="Démo interactive : portail en ligne pour chaque vendeur, avec suivi en direct de la commercialisation.">
+<link rel="stylesheet" href="../assets/hatnova.css">
+<style>
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 16px}
+  .phases div{font-size:11.5px;color:var(--muted);text-align:center}
+  .phases div i{display:block;height:6px;border-radius:99px;background:var(--sand);margin-bottom:5px}
+  .phases div.done i{background:var(--gold)}
+  .phases div.cur i{background:linear-gradient(90deg,var(--gold) 55%,var(--sand) 55%)}
+  .phases div.cur{color:var(--ink);font-weight:700}
+  .cols{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;margin-top:16px}
+  .feed .it{display:grid;grid-template-columns:44px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .feed .it:last-child{border-bottom:0}
+  .feed .it .d{font-size:11.5px;color:var(--gold-d);font-weight:700}
+  .feed .it small{display:block;color:var(--muted)}
+  .feed .it.new{background:#fff8e8;border-radius:8px;padding:9px 8px;margin:0 -8px}
+  .sect{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+  .doc{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .doc:last-child{border-bottom:0}
+  .doc span.g{flex:1}
+  .pricefb{display:grid;grid-template-columns:80px 1fr 24px;gap:8px;align-items:center;font-size:12.5px;margin:5px 0}
+  .pricefb .progress i{background:var(--navy)}
+  .pricefb .progress.hi i{background:var(--red)}
+  @media (max-width:760px){.cols{grid-template-columns:1fr}.phases div{font-size:10px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../index.html"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22.5" fill="none" stroke="#c9a35a" stroke-width="1.5"/><text x="21.5" y="32.5" text-anchor="middle" font-family="Lora,Georgia,serif" font-size="23" font-weight="600" fill="#f4efe6">H</text><path transform="translate(33.5 15) scale(.42)" fill="#c9a35a" d="M0,-10 L2.47,-3.4 L9.51,-3.09 L3.99,1.3 L5.88,8.09 L0,4.2 L-5.88,8.09 L-3.99,1.3 L-9.51,-3.09 L-2.47,-3.4Z"/></svg><span><b>Hatnova</b><small>WEB &amp; CONSULTING</small></span></a><div class="crumb">Démo · <b>Module 3 · Portail propriétaire</b></div><div class="sp"></div><div class="seg" role="group" aria-label="Vue"><button type="button" data-set-view="client" class="on" aria-pressed="true">Vue propriétaire</button><button type="button" data-set-view="agence" aria-pressed="false">Vue agence</button></div><a class="toplink" href="../index.html">← Tous les modules</a></div></header>
+<main class="wrap">
+ <div class="mod">
+  <section class="intro">
+    <div class="eyebrow">Module 3 · Suivi des vendeurs</div>
+    <h1>Portail propriétaire</h1>
+    <p class="lead">Une vente de prestige dure des mois. Les vendeurs demandent régulièrement où en est leur bien, et chaque réponse vous coûte un appel.</p>
+    <ol class="steps">
+      <li><span>1</span><div>État en direct pour chaque mandat : phase, demandes, acheteurs vérifiés, visites.</div></li>
+      <li><span>2</span><div>Retours de visite et offres publiés en une minute, avec l’avis des visiteurs sur le prix.</div></li>
+      <li><span>3</span><div>Documents demandés et reçus, messages au même endroit.</div></li>
+    </ol>
+    <div class="chips"><span class="chip navy">Défi 1 · Course aux mandats</span><span class="chip navy">Défi 2 · Prix irréalistes</span></div>
+    <div class="pricebox"><div><small>Mise en place</small><b>2 290 €</b></div><div><small>Mensuel</small><b>349 €</b></div><div class="free"><small>Mois d’essai</small><b>0 €</b></div></div>
+    <p class="note"><b>Pourquoi ça aide sur le prix :</b> le vendeur voit lui-même, semaine après semaine, ce que pensent les visiteurs. La discussion sur un ajustement de prix devient factuelle.</p>
+  </section>
+
+  <section>
+   <!-- ============ VUE PROPRIÉTAIRE ============ -->
+   <div class="stage" data-view="client">
+    <div class="stage-head"><span class="eyebrow">Vue propriétaire</span><span class="sp"></span><span class="sample">Données d’exemple</span></div>
+    <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i><div class="url">portail.votre-agence.lu · Famille R.</div></div>
+      <div class="browser-body">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h2 style="font-size:23px">Villa Kirchberg · état de la commercialisation</h2><span class="sp" style="flex:1"></span><span class="chip green">Semaine 6</span></div>
+        <div class="phases"><div class="done"><i></i>Préparation</div><div class="cur"><i></i>Commercialisation</div><div><i></i>Négociation / compromis</div><div><i></i>Acte notarié</div></div>
+        <div class="kpis"><div class="kpi"><b id="kReq">37</b><small>Demandes</small></div><div class="kpi"><b id="kVer">9</b><small>Acheteurs vérifiés</small></div><div class="kpi"><b id="kVis">4</b><small>Visites</small></div></div>
+        <div class="cols">
+          <div>
+            <div class="sect">Activités</div>
+            <div class="feed" id="feed"></div>
+          </div>
+          <div>
+            <div class="sect">Avis des visiteurs sur le prix</div>
+            <div id="pfb"></div>
+            <p class="xs muted" style="margin:4px 0 14px">Prix affiché : 3 450 000 €</p>
+            <div class="sect">Documents</div>
+            <div id="docs"></div>
+            <div class="sect" style="margin-top:14px">Message à votre agent</div>
+            <div style="display:flex;gap:6px"><input class="input" id="msg" value="Merci ! Pouvons-nous parler du prix vendredi ?"><button class="btn btn-navy btn-sm" id="send">Envoyer</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+   </div>
+
+   <!-- ============ VUE AGENCE ============ -->
+   <div class="stage hidden" data-view="agence">
+    <div class="stage-head"><span class="eyebrow">Vue agence · Mise à jour en 1 minute</span><span class="sp"></span><span class="sample">Données d’exemple</span></div>
+    <div class="browser">
+      <div class="browser-bar"><i></i><i></i><i></i><div class="url">espace.votre-agence.lu/mandats</div></div>
+      <div class="browser-body">
+        <div class="kpis" style="margin-bottom:16px">
+          <div class="kpi"><b>12</b><small>Mandats actifs</small></div>
+          <div class="kpi"><b id="kCalls">18</b><small>Appels de suivi évités ce mois</small></div>
+          <div class="kpi"><b id="kMsg">0</b><small>Nouveaux messages</small></div>
+        </div>
+        <div class="cols" style="margin-top:0">
+          <form class="card" id="upd" autocomplete="off">
+            <h3 style="font-size:18px;margin-bottom:10px">Publier une mise à jour</h3>
+            <div class="field"><label>Mandat</label><select class="input"><option>Villa Kirchberg · Famille R.</option><option>Penthouse Limpertsberg · M. K.</option><option>Maison Strassen · Mme L.</option></select></div>
+            <div class="field"><label>Type</label>
+              <div class="opts" id="typeOpts"><button type="button" class="opt on" data-v="Visite">Visite</button><button type="button" class="opt" data-v="Offre">Offre</button><button type="button" class="opt" data-v="Info">Info</button></div></div>
+            <div class="field"><label>Texte pour le vendeur</label><textarea class="input" id="txt" rows="3">Visite de la famille N. : coup de cœur pour le jardin, deuxième visite souhaitée avec l’architecte.</textarea></div>
+            <div class="field" id="pfField"><label>Avis du visiteur sur le prix</label>
+              <div class="opts" id="pfOpts"><button type="button" class="opt" data-v="0">Attractif</button><button type="button" class="opt" data-v="1">Juste</button><button type="button" class="opt on" data-v="2">Élevé</button></div></div>
+            <button class="btn btn-gold btn-block" type="submit">Publier pour le vendeur</button>
+          </form>
+          <div>
+            <div class="card">
+              <h3 style="font-size:18px;margin-bottom:8px">Documents à demander</h3>
+              <div class="opts">
+                <button class="btn btn-ghost btn-sm" data-doc="Décompte des charges de copropriété">+ Décompte des charges</button>
+                <button class="btn btn-ghost btn-sm" data-doc="Autorisation de bâtir (extension)">+ Autorisation de bâtir</button>
+              </div>
+              <p class="xs muted" style="margin-top:8px">Le vendeur voit la demande et dépose le document dans son portail.</p>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <h3 style="font-size:18px;margin-bottom:8px">Messages</h3>
+              <div id="inbox" class="small muted">Aucun nouveau message.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   </div>
+  </section>
+ </div>
+<footer class="foot"><span>Démo interactive · données d’exemple, rien n’est enregistré ni envoyé.</span><span>Hatnova Web &amp; Consulting · <a href="https://hattat-web.de/" rel="noopener noreferrer">hattat-web.de</a> · <a href="https://hattat-web.de/impressum.html" rel="noopener noreferrer">Mentions légales / Impressum</a> · <a href="https://hattat-web.de/datenschutz.html" rel="noopener noreferrer">Confidentialité / Datenschutz</a></span></footer>
+</main>
+<script src="../assets/hatnova.js" defer></script>
+<script src="../assets/js/portail-proprietaire.js" defer></script>
+</body>
+</html>

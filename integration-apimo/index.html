@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept d’intégration Apimo — Démo Hatnova</title>
+<meta name="description" content="Concept : intégrer les modules Hatnova dans un site d'agence existant réalisé avec Apimo, sans changer de site ni de logiciel.">
+<link rel="stylesheet" href="../assets/hatnova.css">
+<style>
+  .hero-int h1{font-size:40px;margin:8px 0 10px}
+  .hero-int .lead{font-size:17px;color:var(--ink-2);max-width:760px}
+  .vis{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start;margin-top:26px}
+  .site{background:#fff;color:var(--ink);font-size:13px;position:relative}
+  .site .hd{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid #eee;flex-wrap:wrap}
+  .site .logo{font-family:var(--serif);font-weight:700;letter-spacing:.12em;font-size:15px;color:#333}
+  .site nav{display:flex;gap:14px;flex:1;flex-wrap:wrap;align-items:center}
+  .site nav a,.site nav .nl{text-decoration:none;color:#444}
+  .site .add{display:none}
+  .after .site .add{display:inline-flex}
+  .site .gold{background:var(--gold);color:var(--navy)!important;padding:5px 11px;border-radius:7px;font-weight:700}
+  .site .navyb{border:1px solid var(--navy);color:var(--navy)!important;padding:4px 10px;border-radius:7px;font-weight:600}
+  .site .hb{height:150px;background:linear-gradient(120deg,#cfd8e2,#efe4cf);display:flex;align-items:flex-end;padding:16px 18px;position:relative}
+  .site .hb h4{font-family:var(--serif);font-size:22px;color:#2a2f3a}
+  .site .sel{padding:16px 18px}
+  .site .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+  .site .c{border:1px solid #eee;border-radius:8px;position:relative}
+  .site .c i{display:block;height:64px;border-radius:8px 8px 0 0;background:linear-gradient(120deg,#d9d2c4,#e9e1d2)}
+  .site .c div{padding:7px 9px;font-size:12px}
+  .site .rib{position:absolute;left:6px;top:6px;background:var(--navy);color:var(--gold-2);font-size:9.5px;font-weight:700;letter-spacing:.1em;padding:3px 7px;border-radius:99px}
+  .site .banner{margin:0 18px 16px;border-radius:8px;background:var(--navy);color:var(--cream);padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:12.5px}
+  .site .ft{background:#f4f4f4;color:#777;font-size:11px;padding:10px 18px;display:flex;justify-content:space-between}
+  .site .bubble{position:absolute;right:14px;bottom:44px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:var(--gold-2);display:grid;place-items:center;font-size:19px;box-shadow:0 8px 20px -6px rgba(0,0,0,.5)}
+  .hs{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;font-size:12.5px;display:grid;place-items:center;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 0 rgba(201,163,90,.7);animation:ring 2s infinite;z-index:3}
+  .site .t{position:relative;display:none}
+  .after .site .t{display:inline-flex}
+  .site .c{position:relative}
+  .site .banner{position:relative}
+  .site .kycmail{margin:0 18px 16px;border:1px dashed var(--gold);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--ink-2);display:none;gap:8px;align-items:center;position:relative;max-width:420px}
+  .after .site .kycmail{display:flex}
+  .site .bubble .hs{top:-10px;right:-10px}
+  .hs{top:-11px;right:-11px}
+  .before .hs{display:none}
+  .hs.on{background:var(--navy);color:var(--gold-2)}
+  @keyframes ring{0%{box-shadow:0 0 0 0 rgba(201,163,90,.7)}70%{box-shadow:0 0 0 10px rgba(201,163,90,0)}100%{box-shadow:0 0 0 0 rgba(201,163,90,0)}}
+  .panel{position:sticky;top:86px}
+  .panel .card h3{font-size:20px;margin:6px 0 6px}
+  .panel dl{display:grid;grid-template-columns:76px 1fr;gap:6px 10px;font-size:13.5px;margin:10px 0 12px}
+  .panel dt{color:var(--muted)}
+  .panel dd{margin:0}
+  .lv{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  .lv .card h3{font-size:19px;margin:6px 0 6px}
+  .lv .card ul{padding-left:18px;margin:8px 0 0;font-size:13.5px;color:var(--ink-2)}
+  .flow{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;align-items:center;margin-top:16px}
+  .flow .n{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+  .flow .n b{font-family:var(--serif);font-size:18px;display:block}
+  .flow .n small{color:var(--muted);font-size:12.5px}
+  .flow .n.hn{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+  .flow .n.hn small{color:#b9c1d6}
+  .flow .ar{text-align:center;color:var(--gold-d);font-size:22px}
+  .plan{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+  .plan .card .eyebrow{margin-bottom:4px}
+  .plan .card h4{font-size:16.5px;margin-bottom:6px}
+  .plan .card p{font-size:13.5px;color:var(--ink-2)}
+  section.blk{margin-top:46px}
+  section.blk>h2{font-size:30px;margin-top:6px}
+  .need{columns:2;gap:24px;font-size:14px;color:var(--ink-2);padding-left:18px;margin-top:12px}
+  .need li{margin-bottom:6px;break-inside:avoid}
+  @media (max-width:980px){.vis{grid-template-columns:1fr}.panel{position:static}.lv,.plan{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr;gap:6px}.flow .ar{transform:rotate(90deg)}}
+  @media (max-width:640px){.lv,.plan{grid-template-columns:1fr}.site .cards{grid-template-columns:1fr 1fr}.need{columns:1}.hero-int h1{font-size:30px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../index.html"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22.5" fill="none" stroke="#c9a35a" stroke-width="1.5"/><text x="21.5" y="32.5" text-anchor="middle" font-family="Lora,Georgia,serif" font-size="23" font-weight="600" fill="#f4efe6">H</text><path transform="translate(33.5 15) scale(.42)" fill="#c9a35a" d="M0,-10 L2.47,-3.4 L9.51,-3.09 L3.99,1.3 L5.88,8.09 L0,4.2 L-5.88,8.09 L-3.99,1.3 L-9.51,-3.09 L-2.47,-3.4Z"/></svg><span><b>Hatnova</b><small>WEB &amp; CONSULTING</small></span></a><div class="crumb">Concept · <b>Intégration dans votre site Apimo</b></div><div class="sp"></div><a class="toplink" href="../index.html">← Tous les modules</a></div></header>
+<main class="wrap">
+  <section class="hero-int">
+    <div class="eyebrow">Concept d’intégration · votre site Apimo</div>
+    <h1>Vos modules, dans votre site actuel.</h1>
+    <p class="lead">Vous gardez votre site, votre logiciel Apimo et vos habitudes. Les modules Hatnova s’ajoutent exactement là où vos clients en ont besoin, dans votre charte graphique. Vos biens restent gérés une seule fois, dans Apimo.</p>
+  </section>
+
+  <div class="vis">
+    <div class="stage" style="padding:18px">
+      <div class="stage-head" style="margin-bottom:12px"><span class="eyebrow">Visualisation</span><span class="sp"></span>
+        <div class="seg" id="ba"><button data-m="before">Aujourd’hui</button><button data-m="after" class="on">Avec Hatnova</button></div></div>
+      <div class="browser after" id="frame">
+        <div class="browser-bar"><i></i><i></i><i></i><div class="url">www.votre-agence.lu · site réalisé avec Apimo</div></div>
+        <div class="site">
+          <div class="hd"><span class="logo">VOTRE AGENCE</span>
+            <nav><span class="nl">Ventes</span><span class="nl">Locations</span><span class="nl">Nos services</span><span class="nl">Contact</span>
+              <span class="t add"><span class="navyb">Club privé</span><span class="hs" data-h="2">2</span></span><span class="t add"><span class="navyb">Espace propriétaire</span><span class="hs" data-h="3">3</span></span><span class="t add"><span class="gold">Estimer mon bien</span><span class="hs" data-h="1">1</span></span></nav></div>
+          <div class="hb"><h4>L’immobilier avec engagement</h4></div>
+          <div class="sel"><b style="font-family:var(--serif);font-size:15px">Notre sélection</b>
+            <div class="cards">
+              <div class="c"><span class="rib add">PAGE PREMIUM</span><span class="hs" data-h="6">6</span><i></i><div>Villa · Kockelscheuer</div></div>
+              <div class="c"><span class="rib add">PAGE PREMIUM</span><i></i><div>Penthouse · Limpertsberg</div></div>
+              <div class="c"><i></i><div>Maison · Strassen</div></div>
+            </div></div>
+          <div class="banner add"><span style="font-size:18px">▤</span><span style="flex:1"><b>Rapport de marché T4</b> · gratuit, par e-mail</span><span class="chip" style="background:var(--gold);color:var(--navy)">Recevoir</span><span class="hs" data-h="5">5</span></div>
+          <div class="kycmail add"><span>✉</span><span><b>E-mail à l’acheteur</b> · votre lien sécurisé pour le dossier KYC</span><span class="hs" data-h="7">7</span></div>
+          <div class="ft"><span>© Votre agence</span><span>Design by Apimo™</span></div>
+          <div class="bubble add">✦<span class="hs" data-h="4">4</span></div>
+        </div>
+      </div>
+      <p class="xs" style="color:#8f9ab5;margin-top:10px;position:relative;z-index:1">Maquette schématique d’un site d’agence générique. Cliquez sur les points dorés.</p>
+    </div>
+    <aside class="panel"><div class="card" id="info"></div></aside>
+  </div>
+
+  <section class="blk">
+    <div class="eyebrow">Trois niveaux d’intégration</div>
+    <h2>Commencer simple, approfondir ensuite</h2>
+    <div class="lv">
+      <div class="card"><span class="chip green">Niveau 1 · dès le premier jour</span><h3>Liens et boutons</h3>
+        <p class="small">De nouveaux éléments de menu et boutons sur votre site Apimo mènent vers les modules, hébergés sur un sous-domaine de votre domaine, dans votre charte.</p>
+        <ul><li>Aucune modification technique d’Apimo</li><li>Exemple : services.votre-agence.lu/estimation</li><li>Il suffit d’une entrée DNS et des menus dans votre back-office</li></ul></div>
+      <div class="card"><span class="chip amber">Niveau 2 · à valider avec Apimo</span><h3>Intégré dans vos pages</h3>
+        <p class="small">Le module s’affiche directement dans une page de votre site (formulaire d’estimation, chat, bannière du rapport), si l’éditeur Apimo de votre site le permet.</p>
+        <ul><li>Nous vérifions les possibilités avec le support Apimo</li><li>Sinon, le niveau 1 reste en place, sans perte de fonction</li></ul></div>
+      <div class="card"><span class="chip navy">Niveau 3 · données</span><h3>Synchronisation des biens</h3>
+        <p class="small">Via l’API d’Apimo, les pages premium et le club off-market reprennent automatiquement vos biens, photos et prix.</p>
+        <ul><li>Accès API : jeton et identifiant fournisseur délivrés par le support Apimo</li><li>Vous gérez vos biens une seule fois, dans Apimo</li><li>Les contacts arrivent par e-mail et dans votre tableau de bord</li></ul></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <div class="eyebrow">Flux de données</div>
+    <h2>Qui fait quoi</h2>
+    <div class="flow">
+      <div class="n"><b>Apimo</b><small>Vos biens, photos, prix, votre site actuel</small></div>
+      <div class="ar">→</div>
+      <div class="n hn"><b>Modules Hatnova</b><small>Estimation, pages premium, club privé, portail, assistant, rapport, KYC · hébergement UE</small></div>
+      <div class="ar">→</div>
+      <div class="n"><b>Votre équipe</b><small>Contacts qualifiés par e-mail, sur le téléphone et dans le tableau de bord · export CSV</small></div>
+    </div>
+    <p class="note">Protection des données : hébergement dans l’Union européenne, contrat de sous-traitance (art. 28 RGPD) remis avec l’offre. Les pièces KYC sont stockées chiffrées, séparément du reste.</p>
+  </section>
+
+  <section class="blk">
+    <div class="eyebrow">Mise en place · mois d’essai</div>
+    <h2>Quatre semaines jusqu’à votre décision</h2>
+    <div class="plan">
+      <div class="card"><div class="eyebrow">Semaine 1</div><h4>Lancement</h4><p>Rendez-vous en ligne, choix des deux modules d’essai, demande d’accès API à Apimo, charte graphique.</p></div>
+      <div class="card"><div class="eyebrow">Semaine 2</div><h4>En ligne</h4><p>Modules d’essai en ligne sur votre site (recommandé : 1 · Estimation + 6 · Page premium, pour les défis 1 à 3). Formation de l’équipe.</p></div>
+      <div class="card"><div class="eyebrow">Semaine 3</div><h4>Ajustements</h4><p>Premiers contacts, retours de l’équipe, réglages des textes, des prix au m² et des pages.</p></div>
+      <div class="card"><div class="eyebrow">Semaine 4</div><h4>Bilan</h4><p>Chiffres du mois, échange sur les résultats. Vous continuez, ou vous arrêtez sans frais.</p></div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <div class="eyebrow">Ce dont nous avons besoin</div>
+    <h2>Peu de choses de votre côté</h2>
+    <ul class="need">
+      <li>Un accès à la gestion des menus de votre site Apimo, ou l’accord pour que nous contactions le support Apimo</li>
+      <li>Votre accord pour la demande d’un accès API Apimo (lecture des biens)</li>
+      <li>Logo, couleurs et polices de votre agence</li>
+      <li>Votre grille de prix au m² par quartier (module Estimation)</li>
+      <li>Une entrée DNS pour le sous-domaine, chez votre hébergeur de domaine</li>
+      <li>Une personne de contact dans l’équipe pour la formation</li>
+    </ul>
+    <div class="opts" style="margin-top:20px"><a class="btn btn-navy" href="../index.html">← Voir les sept modules</a><a class="btn btn-gold" href="../estimation/index.html">Essayer le module 1</a><a class="btn btn-ghost" href="../page-premium/index.html">Essayer le module 6</a></div>
+  </section>
+<footer class="foot"><span>Démo interactive · données d’exemple, rien n’est enregistré ni envoyé.</span><span>Hatnova Web &amp; Consulting · <a href="https://hattat-web.de/" rel="noopener noreferrer">hattat-web.de</a> · <a href="https://hattat-web.de/impressum.html" rel="noopener noreferrer">Mentions légales / Impressum</a> · <a href="https://hattat-web.de/datenschutz.html" rel="noopener noreferrer">Confidentialité / Datenschutz</a></span></footer>
+</main>
+<script src="../assets/hatnova.js" defer></script>
+<script src="../assets/js/integration-apimo.js" defer></script>
+</body>
+</html>
